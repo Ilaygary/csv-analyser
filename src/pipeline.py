@@ -111,6 +111,22 @@ class CSVAnalyser:
 		self.log_writer(f"sort({colonne}, reverse={reverse})")
 		return new_analyzer
 
+	# Methode pour lise csv robuste
+	def lire_csv_robuste(self, path:str):
+		import csv
+		self.invalide_lines = []
+		valid_rows = []
+		with open(path, newline='', encoding="utf-8") as f:
+			reader = csv.DictReader(f)
+			for i, row in enumerate(reader, start = 1):
+				try:
+					valid_rows.append(row)
+				except Exception as e:
+					self.invalide_lines.append((i, str(e)))
+		self.data=valid_rows
+		self.path = path
+		self.log_writer(f"Load CSV robuste: {len(valid_rows)} valides, {len(self.invalide_lines)} invalides")
+
 
 	#Methode pour filter
 	def filter(self, colonne: str, valeur: str):
@@ -201,9 +217,9 @@ if __name__ == "__main__":
 	# print(sub)
 	# print("Moyenne math (sub):", sub.mean("math score"))
 	# an.show_history()
-	# an.lire_csv_robuste("../Data/StudentsPerformance.csv")
-	sub = an.sort("math score", reverse=True)
-	sub.head(5)
+	an.lire_csv_robuste("../Data/StudentsPerformance.csv")
+	# sub = an.sort("math score", reverse=True)
+	# sub.head(5)
 
 	# st = StudentsAnalyser(data=an.data)
 	# print(st.moyenne_math(), st.taux_reussite())

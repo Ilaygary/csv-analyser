@@ -99,6 +99,19 @@ class CSVAnalyser:
 		for i, op in enumerate(self.historique):
 			print(f"{i}: {op}")
 
+	# Méthode pour Trier
+	def sort(self, colonne: str, reverse: bool=False):
+		if not self.data:
+			return CSVAnalyser(data=[])
+		if colonne not in self.data[0]:
+			raise ValueError(f"Colonne '{colonne}' inexistante")
+
+		sorted_data = sorted(self.data, key=lambda r: float(r[colonne]) if r.get(colonne) else float('-inf'), reverse=reverse)
+		new_analyzer = CSVAnalyser(data=sorted_data)
+		self.log_writer(f"sort({colonne}, reverse={reverse})")
+		return new_analyzer
+
+
 	#Methode pour filter
 	def filter(self, colonne: str, valeur: str):
 		new_data = filtrer(self.data, colonne, valeur)
@@ -188,9 +201,12 @@ if __name__ == "__main__":
 	# print(sub)
 	# print("Moyenne math (sub):", sub.mean("math score"))
 	# an.show_history()
+	# an.lire_csv_robuste("../Data/StudentsPerformance.csv")
+	sub = an.sort("math score", reverse=True)
+	sub.head(5)
 
-	st = StudentsAnalyser(data=an.data)
-	print(st.moyenne_math(), st.taux_reussite())
-	subf = st.filter("gender", "female")
-	print("Moyenne math (sub):", subf.mean("math score"))
-	st.show_history()
+	# st = StudentsAnalyser(data=an.data)
+	# print(st.moyenne_math(), st.taux_reussite())
+	# subf = st.filter("gender", "female")
+	# print("Moyenne math (sub):", subf.mean("math score"))
+	# st.show_history()

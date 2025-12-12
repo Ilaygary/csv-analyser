@@ -39,7 +39,7 @@ def somme(data: List[Dict[str, str]], colonne: str) -> float:
  	nums = to_numbers(data, colonne)
  	return sum(nums)
 
-# FOnction calcul de la moyenne
+#calcul de la moyenne
 def moyenne(data: List[Dict[str,str]], colonne: str) -> float:
 	nums = to_numbers(data, colonne)
 	return sum(nums) / len(nums) if nums else 0.0

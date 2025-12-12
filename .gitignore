@@ -1,0 +1,3 @@
+__pycache__/
+*.fuse_hidden*
+tests/test_logger.py

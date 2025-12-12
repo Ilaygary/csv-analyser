@@ -81,11 +81,11 @@ class CSVAnalyser:
 		self.historique.append(desc)
 
 
-	# Afficher historique
+	# Méthode pour afficher historique
 	def show_history(self):
 		for i, op in enumerate(self.historique):
 			print(f"{i}: {op}")
-	#filter
+	#Methode pour filter
 	def filter(self, colonne: str, valeur: str):
 		new_data = filtrer(self.data, colonne, valeur)
 		new_analyzer = CSVAnalyser(data=new_data)
@@ -98,12 +98,12 @@ class CSVAnalyser:
 		self.add_history(f"sum({colonne})={val}")
 		return val
 
-	#moyenne
+	#Méthode pour calculer la moyenne
 	def mean(self, colonne: str) -> float:
 		val = moyenne(self.data, colonne)
 		self.add_history(f"mean({colonne})={val}")
 		return val
-	#resumé
+	#Méthode pour un resumé
 	def head(self, n: int=5):
 		resume(self.data, n)
 

@@ -218,7 +218,7 @@ if __name__ == "__main__":
 	# print("Moyenne math (sub):", sub.mean("math score"))
 	# an.show_history()
 	an.lire_csv_robuste("../Data/StudentsPerformance.csv")
-	# sub = an.sort("math score", reverse=True)
+	sub = an.sort("math score", reverse=True)
 	# sub.head(5)
 
 	# st = StudentsAnalyser(data=an.data)

@@ -99,6 +99,35 @@ class CSVAnalyser:
 		for i, op in enumerate(self.historique):
 			print(f"{i}: {op}")
 
+	# Méthode pour Trier
+	def sort(self, colonne: str, reverse: bool=False):
+		if not self.data:
+			return CSVAnalyser(data=[])
+		if colonne not in self.data[0]:
+			raise ValueError(f"Colonne '{colonne}' inexistante")
+
+		sorted_data = sorted(self.data, key=lambda r: float(r[colonne]) if r.get(colonne) else float('-inf'), reverse=reverse)
+		new_analyzer = CSVAnalyser(data=sorted_data)
+		self.log_writer(f"sort({colonne}, reverse={reverse})")
+		return new_analyzer
+
+	# Methode pour lise csv robuste
+	def lire_csv_robuste(self, path:str):
+		import csv
+		self.invalide_lines = []
+		valid_rows = []
+		with open(path, newline='', encoding="utf-8") as f:
+			reader = csv.DictReader(f)
+			for i, row in enumerate(reader, start = 1):
+				try:
+					valid_rows.append(row)
+				except Exception as e:
+					self.invalide_lines.append((i, str(e)))
+		self.data=valid_rows
+		self.path = path
+		self.log_writer(f"Load CSV robuste: {len(valid_rows)} valides, {len(self.invalide_lines)} invalides")
+
+
 	#Methode pour filter
 	def filter(self, colonne: str, valeur: str):
 		new_data = filtrer(self.data, colonne, valeur)
@@ -188,9 +217,12 @@ if __name__ == "__main__":
 	# print(sub)
 	# print("Moyenne math (sub):", sub.mean("math score"))
 	# an.show_history()
+	an.lire_csv_robuste("../Data/StudentsPerformance.csv")
+	sub = an.sort("math score", reverse=True)
+	sub.head(5)
 
-	st = StudentsAnalyser(data=an.data)
-	print(st.moyenne_math(), st.taux_reussite())
-	subf = st.filter("gender", "female")
-	print("Moyenne math (sub):", subf.mean("math score"))
-	st.show_history()
+	# st = StudentsAnalyser(data=an.data)
+	# print(st.moyenne_math(), st.taux_reussite())
+	# subf = st.filter("gender", "female")
+	# print("Moyenne math (sub):", subf.mean("math score"))
+	# st.show_history()

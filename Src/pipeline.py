@@ -1,5 +1,6 @@
 import csv
 from typing import List, Dict, Any
+import math
 
 #Lecture du fichier
 def lire_csv(path: str) -> List[Dict[str,str]]:
@@ -103,9 +104,32 @@ class CSVAnalyser:
 		val = moyenne(self.data, colonne)
 		self.add_history(f"mean({colonne})={val}")
 		return val
+
+	#Statistiques avancés
+	def min_value(self, colonne: str):
+		nums = [float(r[colonne]) for r in self.data if r.get(colonne)]
+		return min(nums) if nums else None
+
+	def max_value(self, colonne: str):
+		nums = [float(r[colonne]) for r in self.data if r.get(colonne)]
+		return max(nums) if nums else None
+
+	def variance(self, colonne):
+		nums = [float(r[colonne]) for r in self.data if r.get(colonne)]
+		n = len(nums)
+		if n < 2:
+			return 0.0
+		mean = sum(nums) / n
+		return sum((x - mean) ** 2 for x in nums) / (n - 1)
+
+	def std_dev(self, colonne):
+		return math.sqrt(self.variance(colonne))
+
 	#Méthode pour un resumé
 	def head(self, n: int=5):
 		resume(self.data, n)
+
+
 
 #Sous-classes
 class StudentsAnalyser(CSVAnalyser):
